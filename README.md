@@ -1,5 +1,5 @@
 # Cesium Terrain Builder
-[![Build Status](http://http://tekware.mywire.org:8081/buildStatus/icon?job=cesium-terrain-builder%2Fci-test)](http://http://tekware.mywire.org:8081/job/cesium-terrain-builder/job/ci-test/)
+[![Build Status](http://tekware.mywire.org:8081/buildStatus/icon?job=cesium-terrain-builder%2Fci-test)](http://tekware.mywire.org:8081/job/cesium-terrain-builder/job/ci-test/)
 
 This is a C++ library and associated command line tools designed to create
 terrain tiles for use with the [Cesium JavaScript](http://cesiumjs.org) library.
