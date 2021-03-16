@@ -24,13 +24,14 @@ pipeline {
             sh 'cd build && cmake .. && make && make install'
             sh 'rm -rf build'
             sh 'docker commit $(basename $(cat /proc/1/cpuset)) foo-docker'
+            sh 'apk del --no-cache wget curl unzip make cmake libtool autoconf automake pkgconfig g++ zlib-dev docker'
         }
     }
 
     stage('Deploy Image') {
       agent any
       steps{
-        sh "docker tag $imagename_src:$BUILD_NUMBER $imagename_dst:$BUILD_NUMBER"
+        sh "docker tag foo-docker:latest $imagename_dst:$BUILD_NUMBER"
         script {
           docker.withRegistry( '', registryCredential ) {
             dockerImage.push("$BUILD_NUMBER")
