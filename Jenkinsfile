@@ -5,29 +5,24 @@ pipeline {
     registryCredential = 'mcerolini'
     dockerImage = ''
   }
-  agent any
+  agent none
   stages {
-    stage('Getting image') {
-      steps {
-        script {
-            dockerImage = docker.image(imagename_src).pull()
-        }
-      }
-    }
 
     stage('Building image') {
-      steps {
-        script {
-          dockerImage.inside("-u root:root") {
-                sh 'apk add --no-cache wget curl unzip make cmake libtool  autoconf automake pkgconfig g++ zlib-dev'
-                sh 'pwd'
-                sh 'ls -la'
-                sh 'rm -rf build'
-                sh 'mkdir build'
-                sh 'cd build && cmake .. && make && make install'
-            }
+        agent {
+            docker { 
+                    image imagename_src
+                    args '-u root:root'
+                    }
         }
-      }
+        steps {
+            sh 'apk add --no-cache wget curl unzip make cmake libtool  autoconf automake pkgconfig g++ zlib-dev'
+            sh 'pwd'
+            sh 'ls -la'
+            sh 'rm -rf build'
+            sh 'mkdir build'
+            sh 'cd build && cmake .. && make && make install'
+        }   
     }
 
     stage('Deploy Image') {
