@@ -17,14 +17,14 @@ pipeline {
                     }
         }
         steps {
-            sh 'apk add --no-cache wget curl unzip make cmake libtool autoconf automake pkgconfig g++ zlib-dev'
+            sh 'apk add --no-cache wget curl unzip make cmake libtool autoconf automake pkgconfig g++ zlib-dev docker'
             sh 'pwd'
             sh 'ls -la'
             sh 'rm -rf build'
             sh 'mkdir build'
             sh 'cd build && cmake .. && make && make install'
             sh 'rm -rf build'
-            docker commit $(basename $(cat /proc/1/cpuset)) foo-docker
+            sh 'docker commit $(basename $(cat /proc/1/cpuset)) foo-docker'
         }
     }
 
