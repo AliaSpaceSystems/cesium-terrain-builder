@@ -23,7 +23,11 @@ pipeline {
             sh 'mkdir build'
             sh 'cd build && cmake .. && make && make install'
             sh 'rm -rf build'
-        }   
+        }
+        agent any
+        steps{
+          sh "docker tag $imagename_src:$BUILD_NUMBER $imagename_dst:$BUILD_NUMBER"
+        }
     }
 
     stage('Deploy Image') {
