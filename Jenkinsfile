@@ -16,7 +16,7 @@ pipeline {
     }
 
     stage('Building image') {
-      steps{
+      steps {
         script {
           dockerImage.inside("-u root:root") {
                 sh 'apk add --no-cache wget curl unzip make cmake libtool  autoconf automake pkgconfig g++ zlib-dev'
