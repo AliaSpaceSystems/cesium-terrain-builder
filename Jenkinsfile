@@ -32,7 +32,7 @@ pipeline {
 
     stage('Deploy Image') {
       steps{
-        sh "docker tag imagename_src:$BUILD_NUMBER imagename_dst:$BUILD_NUMBER""
+        sh "docker tag imagename_src:$BUILD_NUMBER imagename_dst:$BUILD_NUMBER"
         script {
           docker.withRegistry( '', registryCredential ) {
             dockerImage.push("$BUILD_NUMBER")
