@@ -1,14 +1,14 @@
 pipeline {
   environment {
     imagename_src = "mcerolini/eo4africa"
-    imagename_dst = "mcerolini/ctb"
+    imagename_dst = "mcerolini/ctb-quantized-mesh"
     registryCredential = 'mcerolini'
     dockerImage = ''
   }
   agent none
   stages {
 
-    stage('Building image') {
+    stage('Building source') {
         agent {
             docker { 
                     image imagename_src
@@ -28,13 +28,22 @@ pipeline {
         }
     }
 
+    stage('Building image') {
+      agent any
+      steps{
+        script {
+          dockerImage = docker.build imagename_dst
+        }
+      }
+    }
     stage('Deploy Image') {
       agent any
       steps{
-        sh "docker tag foo-docker:latest $imagename_dst:$BUILD_NUMBER"
         script {
           docker.withRegistry( '', registryCredential ) {
-            sh "docker push $imagename_dst:$BUILD_NUMBER"
+            dockerImage.push("$BUILD_NUMBER")
+             dockerImage.push('latest')
+
           }
         }
       }
@@ -42,11 +51,9 @@ pipeline {
     stage('Remove Unused docker image') {
       agent any
       steps{
-        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE')
-        {
-            sh "docker rmi foo-docker:latest"
-            sh "docker rmi $imagename_dst:$BUILD_NUMBER"
-        }
+        sh "docker rmi $imagename_dst:$BUILD_NUMBER"
+         sh "docker rmi $imagename_dst:latest"
+
       }
     }
   }
