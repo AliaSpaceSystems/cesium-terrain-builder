@@ -5,7 +5,7 @@ pipeline {
     registryCredential = 'mcerolini'
     dockerImage = ''
   }
-  agent none
+  agent any
   stages {
 
     stage('Building image') {
