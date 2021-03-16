@@ -12,7 +12,7 @@ pipeline {
         agent {
             docker { 
                     image imagename_src
-                    args '-u root:root'
+                    //args '-u root:root'
                     }
         }
         steps {
