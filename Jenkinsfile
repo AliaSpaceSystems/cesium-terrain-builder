@@ -12,7 +12,7 @@ pipeline {
         agent {
             docker { 
                     image imagename_src
-                    //args '-u root:root'
+                    args '-u root:root'
                     }
         }
         steps {
@@ -22,6 +22,7 @@ pipeline {
             sh 'rm -rf build'
             sh 'mkdir build'
             sh 'cd build && cmake .. && make && make install'
+            sh 'rm -rf build'
         }   
     }
 
