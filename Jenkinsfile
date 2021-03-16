@@ -12,8 +12,7 @@ pipeline {
         agent {
             docker { 
                     image imagename_src
-                    args '-u root:root'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+                    args '-u root:root -v /var/run/docker.sock:/var/run/docker.sock'
                     }
         }
         steps {
