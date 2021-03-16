@@ -5,7 +5,7 @@ pipeline {
     registryCredential = 'mcerolini'
     dockerImage = ''
   }
-  agent any
+  agent none
   stages {
 
     stage('Building image') {
@@ -26,6 +26,7 @@ pipeline {
     }
 
     stage('Deploy Image') {
+      agent any
       steps{
         sh "docker tag imagename_src:$BUILD_NUMBER imagename_dst:$BUILD_NUMBER"
         script {
@@ -38,6 +39,7 @@ pipeline {
       }
     }
     stage('Remove Unused docker image') {
+      agent any
       steps{
         sh "docker rmi $imagename_src:$BUILD_NUMBER"
          sh "docker rmi $imagename_src:latest"
