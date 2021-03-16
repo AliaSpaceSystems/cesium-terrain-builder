@@ -16,7 +16,7 @@ pipeline {
                     }
         }
         steps {
-            sh 'apk add --no-cache wget curl unzip make cmake libtool autoconf automake pkgconfig g++ zlib-dev docker'
+            sh 'apk add wget curl unzip make cmake libtool autoconf automake pkgconfig g++ zlib-dev docker'
             sh 'pwd'
             sh 'ls -la'
             sh 'rm -rf build'
@@ -24,7 +24,7 @@ pipeline {
             sh 'cd build && cmake .. && make && make install'
             sh 'rm -rf build'
             sh 'docker commit $(basename $(cat /proc/1/cpuset)) foo-docker'
-            sh 'apk del --no-cache wget curl unzip make cmake libtool autoconf automake pkgconfig g++ zlib-dev docker'
+            sh 'apk del wget curl unzip make cmake libtool autoconf automake pkgconfig g++ zlib-dev docker'
         }
     }
 
@@ -42,11 +42,11 @@ pipeline {
     stage('Remove Unused docker image') {
       agent any
       steps{
-        sh "docker rmi $imagename_src:$BUILD_NUMBER"
-         sh "docker rmi $imagename_src:latest"
-        sh "docker rmi $imagename_dst:$BUILD_NUMBER"
-         sh "docker rmi $imagename_dst:latest"
-
+        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE')
+        {
+            sh "docker rmi foo-docker:latest"
+            sh "docker rmi $imagename_dst:$BUILD_NUMBER"
+        }
       }
     }
   }
