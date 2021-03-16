@@ -34,9 +34,7 @@ pipeline {
         sh "docker tag foo-docker:latest $imagename_dst:$BUILD_NUMBER"
         script {
           docker.withRegistry( '', registryCredential ) {
-            dockerImage.push("$BUILD_NUMBER")
-             dockerImage.push('latest')
-
+            sh "docker push $imagename_dst:$BUILD_NUMBER"
           }
         }
       }
