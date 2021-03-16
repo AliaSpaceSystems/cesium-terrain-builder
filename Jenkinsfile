@@ -13,20 +13,18 @@ pipeline {
             docker { 
                     image imagename_src
                     args '-u root:root'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock'
                     }
         }
         steps {
-            sh 'apk add --no-cache wget curl unzip make cmake libtool  autoconf automake pkgconfig g++ zlib-dev'
+            sh 'apk add --no-cache wget curl unzip make cmake libtool autoconf automake pkgconfig g++ zlib-dev'
             sh 'pwd'
             sh 'ls -la'
             sh 'rm -rf build'
             sh 'mkdir build'
             sh 'cd build && cmake .. && make && make install'
             sh 'rm -rf build'
-        }
-        agent any
-        steps{
-          sh "docker tag $imagename_src:$BUILD_NUMBER $imagename_dst:$BUILD_NUMBER"
+            docker commit $(basename $(cat /proc/1/cpuset)) foo-docker
         }
     }
 
